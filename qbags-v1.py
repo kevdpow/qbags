@@ -110,7 +110,7 @@ print("\n" + "-" * 50 + "\n")
 def qbags(CSVFile): #compares DirList to CSV, creates bags from matches
     with open(CSVFile) as ifile:
         CSVData = csv.DictReader(ifile)
-        data = [row for row in csv.reader(codecs.open(CSVFile, encoding = 'ISO-8859-1', errors='ignore'))]
+        data = [row for row in csv.reader(codecs.open(CSVFile, errors='ignore'))]
         key = data[0][0]
         dir_in_csv = []
         for row in CSVData:
