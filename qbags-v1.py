@@ -50,9 +50,10 @@ class getPaths(tk.Tk):
         self.top = tk.Toplevel()
         self.top.config(width=1000)
         self.top.title("Instructions")
+        #help menu instructions
         self.instructions="""INSTRUCTIONS:
 
-1) Select a CSV file with bag metadata. Make sure bag names are in the first column. Values in row 1 will be metadata fields in bag-info.txt.
+1) Select a CSV file with bag metadata. Make sure bag names are in Column A. Values in row 1 will be metadata fields in bag-info.txt.
 
 2) Select a Source Path with subdirectories you'd like to turn into bags. Make sure those subdirectories match the bag names in the first CSV column. Otherwise they will not be bagged.
 
@@ -92,18 +93,19 @@ compress = app.zip
 CSVPath = Paths[0]
 BagPath = Paths[1]
 TargetPath = Paths[2]
-if len(Paths) == 4:
+if len(Paths) == 4: #checking for Reports Path
     BrunnPath = Paths[3]
     if BagPath == BrunnPath:
         print("Error: Source Path and Reports Path cannot be identical. Please store reports elsewhere.")
         sys.exit()
     BrunnList = [f for f in os.listdir(BrunnPath) if os.path.isdir(os.path.join(BrunnPath, f))]
 
+#makes list out of subdirectories in BagPath  
 DirList = [f for f in os.listdir(BagPath) if os.path.isdir(os.path.join(BagPath, f))]
 
 print("\n" + "-" * 50 + "\n")
 
-def makehere(CSVFile):
+def qbags(CSVFile): #compares DirList to CSV, creates bags from matches
     with open(CSVFile) as ifile:
         CSVData = csv.DictReader(ifile)
         data = [row for row in csv.reader(open(CSVFile))]
@@ -125,17 +127,17 @@ def makehere(CSVFile):
                                 FullBrunnPath = BrunnPath + '/' + brunn
                                 reportsDir = FullTargetPath + '/reports'
                                 shutil.copytree(FullBrunnPath, reportsDir)
-                                if not bag.is_valid():
+                                if not bag.is_valid(): #if bag is not valid before bag.save(), qbags will exit
                                     print("{} is not a valid bag.".format(dir))
                                     sys.exit()
                                 else:
                                     bag.save(manifests=True)
-                    if not bag.is_valid():
+                    if not bag.is_valid(): #if bag is not valid before bag.save(), qbags will exit
                         print("{} is not a valid bag.".format(dir))
                         sys.exit()
                     else:
                         bag.save()
-                    if compress[0] == 1:
+                    if compress[0] == 1: 
                         os.chdir(TargetPath)
                         shutil.make_archive(dir, 'zip', FullTargetPath)
                         shutil.rmtree(FullTargetPath)
@@ -146,4 +148,4 @@ def makehere(CSVFile):
             print("{} is not in the CSV and was not bagged.".format(i))
         print("\n" + "-" * 50)
 
-makehere(CSVPath)
+qbags(CSVPath)
