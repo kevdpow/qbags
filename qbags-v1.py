@@ -53,20 +53,14 @@ class getPaths(tk.Tk):
         self.instructions="""INSTRUCTIONS:
 
 1) Select a CSV file with bag metadata. Make sure bag names are in the first column. Values in row 1 will be metadata fields in bag-info.txt.
-
 2) Select a Source Path with subdirectories you'd like to turn into bags. Make sure those subdirectories match the bag names in the first CSV column. Otherwise they will not be bagged.
-
 3) Select a Destination Path for the bags you're creating. If you want to create bags in place, use the Source Path again here.     
-
 4) OPTIONAL: Select a Reports Path with subdirectories that contain additional documentation about any or all of the bags. Directories containing additional documentation must include the bag name (e.g. "Bag001-Reports" for "Bag001"). 
-
 5) OPTIONAL: Compress each bag by selecting 'Zip Bags.'"""
         self.msg = tk.Message(self.top, text=self.instructions)
         self.msg.pack()
-
         self.done = tk.Button(self.top, text="Duly Noted", command=self.top.destroy)
         self.done.pack()
-
     def getCSV(self):
         self.fileName = tk.filedialog.askopenfilename(filetypes = (('Comma Separated Values', '*.csv'), ('All Files', '*.*')), title = "Choose a CSV File")
         self.e1.insert(0, self.fileName)
