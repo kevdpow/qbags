@@ -1,11 +1,11 @@
-import bagit
-import codecs
+import os
+import sys
 import csv
 import itertools
-import os
 import shutil
-import sys
-
+import time
+import bagit
+import codecs
 from tkinter import Tk, filedialog, IntVar
 
 import tkinter as tk
@@ -110,7 +110,7 @@ print("\n" + "-" * 50 + "\n")
 def qbags(CSVFile): #compares DirList to CSV, creates bags from matches
     with open(CSVFile) as ifile:
         CSVData = csv.DictReader(ifile)
-        data = [row for row in csv.reader(codecs.open(CSVFile, encoding = "ISO-8859-1"))]
+        data = [row for row in csv.reader(codecs.open(CSVFile, encoding = 'ISO-8859-1', errors='ignore'))]
         key = data[0][0]
         dir_in_csv = []
         for row in CSVData:
@@ -145,6 +145,7 @@ def qbags(CSVFile): #compares DirList to CSV, creates bags from matches
                         shutil.rmtree(FullTargetPath)
                     print("{} successfully bagged.".format(dir))
                     dir_in_csv.append(dir)
+                    time.sleep(2)
         difference = set(DirList) - set(dir_in_csv)
         for i in difference:
             print("{} is not in the CSV and was not bagged.".format(i))
