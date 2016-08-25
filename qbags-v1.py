@@ -1,9 +1,11 @@
-import os
-import sys
+import bagit
+import codecs
 import csv
 import itertools
+import os
 import shutil
-import bagit
+import sys
+
 from tkinter import Tk, filedialog, IntVar
 
 import tkinter as tk
@@ -108,7 +110,7 @@ print("\n" + "-" * 50 + "\n")
 def qbags(CSVFile): #compares DirList to CSV, creates bags from matches
     with open(CSVFile) as ifile:
         CSVData = csv.DictReader(ifile)
-        data = [row for row in csv.reader(open(CSVFile))]
+        data = [row for row in csv.reader(codecs.open(CSVFile, encoding = "ISO-8859-1"))]
         key = data[0][0]
         dir_in_csv = []
         for row in CSVData:
