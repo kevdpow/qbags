@@ -29,3 +29,8 @@ $ python3 qbags-vX.py
 3. Select a Destination Path for the bags you're creating. If you want to create bags in place, use the Source Path again here.     
 4. OPTIONAL: Select a Reports Path with subdirectories that contain additional documentation about any or all of the bags. Directories containing additional documentation must include the bag name (e.g. "Bag001-Reports" for "Bag001"). 
 5. OPTIONAL: Compress each bag by selecting 'Zip Bags.'
+
+## Further Development
+- Write bagging date and/or bag path to CSV (or another document), creating a log of completed work.  
+- Add compression options. 
+- Prompt user to overwrite or rename bag if an identical version exists in destination path.
