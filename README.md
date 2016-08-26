@@ -1,6 +1,9 @@
 # qbags v.1.0.0
 The MIT License (MIT)  
-Copyright (c) 2016 Kevin Powell  
+Copyright (c) 2016 Kevin Powell
+
+## Overview  
+Qbags uses the bagit-python module and CSV data to create bags from subdirectories in a designated source path. A CSV bag queue should include the subdirectories' names and any metadata you'd like to include in each bag's bag-info.txt file.    
 
 ## Dependencies
 - Python 3.0 or higher
