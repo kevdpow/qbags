@@ -20,7 +20,7 @@ $ python3 qbags-vX.py
 ```
 ### Windows 10
 - Right-click qbags-vX.py
-- Open With
+- Open With...
 - Select "Python Launcher for Windows (Console)"
 
 ### Instructions
