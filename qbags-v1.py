@@ -25,12 +25,10 @@ class getPaths(tk.Tk):
         self.label1 = tk.Label(self, text="CSV Path").grid(row=1, column=0, sticky=tk.E)
         self.label2 = tk.Label(self, text="Source Path").grid(row=2, column=0, sticky=tk.E)
         self.label3 = tk.Label(self, text="Destination Path").grid(row=3, column=0, sticky=tk.E)
-        self.label4 = tk.Label(self, text="Reports Path").grid(row=5, column=0, sticky=tk.E)
 
         self.e1 = tk.Entry(self, width=50)
         self.e2 = tk.Entry(self, width=50)
         self.e3 = tk.Entry(self, width=50)
-        self.e4 = tk.Entry(self, width=50)
 
         self.zip = IntVar()
         self.e5 = tk.Checkbutton(self, text="Zip Bags", variable=self.zip)
@@ -39,14 +37,12 @@ class getPaths(tk.Tk):
         self.e2Grid = self.e2.grid(row=2, column=1)
         self.e3Grid = self.e3.grid(row=3, column=1)
 
-        self.e4Grid = self.e4.grid(row=5, column=1)
         self.e5Grid = self.e5.grid(row=7, column=0, columnspan=3)
 
         self.browseCSV = tk.Button(self, text='Browse', command=self.getCSV).grid(row=1, column=2, sticky=tk.W)
         self.browseDirectory = tk.Button(self, text='Browse', command=self.getDirectory).grid(row=2, column=2, sticky=tk.W)
         self.browseTarget = tk.Button(self, text='Browse', command=self.getTarget).grid(row=3, column=2, sticky=tk.W)
 
-        self.browseBrunn = tk.Button(self, text='Browse', command=self.getBrunn).grid(row=5, column=2, sticky=tk.W)
         self.submit = tk.Button(self, text='Submit', command=self.submit, width=30).grid(row=8, column=0, columnspan = 3)
     def helpText(self):
         self.top = tk.Toplevel()
@@ -61,9 +57,7 @@ class getPaths(tk.Tk):
 
 3) Select a Destination Path for the bags you're creating. If you want to create bags in place, use the Source Path again here.
 
-4) OPTIONAL: Select a Reports Path with subdirectories that contain additional documentation about any or all of the bags. Directories containing additional documentation must include the bag name (e.g. "Bag001-Reports" for "Bag001").
-
-5) OPTIONAL: Compress each bag by selecting 'Zip Bags.'"""
+4) OPTIONAL: Compress each bag by selecting 'Zip Bags.'"""
         self.msg = tk.Message(self.top, text=self.instructions)
         self.msg.pack()
         self.done = tk.Button(self.top, text="Duly Noted", command=self.top.destroy)
@@ -77,13 +71,8 @@ class getPaths(tk.Tk):
     def getTarget(self):
         self.targetName = tk.filedialog.askdirectory(title = "Choose Destination Directory")
         self.e3.insert(0, self.targetName)
-    def getBrunn(self):
-        self.brunnName = tk.filedialog.askdirectory(title = "Choose Brunnhilde Directory")
-        self.e4.insert(0, self.brunnName)
     def submit(self):
         self.paths = [self.e1.get(), self.e2.get(), self.e3.get()]
-        if self.e4.get():
-            self.paths.append(self.e4.get())
         self.zip = [self.zip.get()]
         self.destroy()
 
@@ -95,12 +84,6 @@ compress = app.zip
 CSVPath = Paths[0]
 BagPath = Paths[1]
 TargetPath = Paths[2]
-if len(Paths) == 4: #checking for Reports Path
-    BrunnPath = Paths[3]
-    if BagPath == BrunnPath:
-        print("Error: Source Path and Reports Path cannot be identical. Please store reports elsewhere.")
-        sys.exit()
-    BrunnList = [f for f in os.listdir(BrunnPath) if os.path.isdir(os.path.join(BrunnPath, f))]
 
 #makes list out of subdirectories in BagPath  
 DirList = [f for f in os.listdir(BagPath) if os.path.isdir(os.path.join(BagPath, f))]
@@ -123,22 +106,11 @@ def qbags(CSVFile): #compares DirList to CSV, creates bags from matches
                     bagit.make_bag(FullTargetPath)
                     bag = bagit.Bag(FullTargetPath)
                     bag.info.update(row)
-                    if len(Paths) == 4:
-                        for brunn in BrunnList:
-                            if dir in brunn:
-                                FullBrunnPath = BrunnPath + '/' + brunn
-                                reportsDir = FullTargetPath + '/reports'
-                                shutil.copytree(FullBrunnPath, reportsDir)
-                                if not bag.is_valid(): #if bag is not valid before bag.save(), qbags will exit
-                                    print("{} is not a valid bag.".format(dir))
-                                    sys.exit()
-                                else:
-                                    bag.save(manifests=True)
                     if not bag.is_valid(): #if bag is not valid before bag.save(), qbags will exit
                         print("{} is not a valid bag.".format(dir))
                         sys.exit()
                     else:
-                        bag.save()
+                        bag.save(manifests=True)
                     if compress[0] == 1: 
                         os.chdir(TargetPath)
                         shutil.make_archive(dir, 'zip', FullTargetPath)
